@@ -8,6 +8,8 @@
 
 /* Begin PBXFileReference section */
 		2755DBE4259DFA3900971ABA /* device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = device.cpp; path = ../Photon/IoTlib/src/device.cpp; sourceTree = "<group>"; };
+		2755DBE525A9DE6500971ABA /* project.properties */ = {isa = PBXFileReference; lastKnownFileType = text; name = project.properties; path = ../Photon/Controllers/UnitTests/project.properties; sourceTree = "<group>"; };
+		2755DBE625A9DE8200971ABA /* UnitTests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = UnitTests; path = ../Photon/Controllers/UnitTests; sourceTree = "<group>"; };
 		E41085852568627000EFBE84 /* PatriotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PatriotLight.cpp; path = ../Photon/Plugins/Light/src/PatriotLight.cpp; sourceTree = "<group>"; };
 		E41085862568627000EFBE84 /* PatriotLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PatriotLight.h; path = ../Photon/Plugins/Light/src/PatriotLight.h; sourceTree = "<group>"; };
 		E41085872568628F00EFBE84 /* library.properties */ = {isa = PBXFileReference; lastKnownFileType = text; name = library.properties; path = ../Photon/Plugins/Light/library.properties; sourceTree = "<group>"; };
@@ -118,6 +120,8 @@
 		E4849C6E2566AC0F00A39734 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2755DBE625A9DE8200971ABA /* UnitTests */,
+				2755DBE525A9DE6500971ABA /* project.properties */,
 				E4E61716257D285400D7AA04 /* LeftSlide */,
 				E410859525688BE000EFBE84 /* NCD8LightTest */,
 				E4849C712566B28800A39734 /* RearPanel */,
