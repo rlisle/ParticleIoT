@@ -10,5 +10,6 @@ public:
     
     void iot();
     void device();
+    void partOfDay();
     
 };

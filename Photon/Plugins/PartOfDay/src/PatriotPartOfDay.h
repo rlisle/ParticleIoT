@@ -33,8 +33,12 @@ All text above must be included in any redistribution.
 #include <device.h>
 #include "Period.h"
 
+class UnitTest;
+
 class PartOfDay : public Device
 {
+    friend UnitTest;
+    
 private:
     unsigned long  _lastPollTime;
     Period     _periods[8];

@@ -42,18 +42,13 @@ void setup() {
     Log.info("#");
     Log.info("#");
     
-    //TODO: Test IoT
+    //Run Tests
     test->iot();
-    
-    //TODO: Test basic Device
     test->device();
-    
-    //TODO: Test PartOfDay
+    test->partOfDay();
     
     //TODO: Test Light
-    
     // TODO: Test NCD8Light
-    
     // TODO: Test Switch
     
     // Print summary
