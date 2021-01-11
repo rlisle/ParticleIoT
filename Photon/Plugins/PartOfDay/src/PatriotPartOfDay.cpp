@@ -7,14 +7,14 @@ PatriotPartOfDay plugin
  - _value will be a value of 0 to 7 as listed below
   
   - Periods can be (in podNum order):
-    0 Sunrise
-    1 Morning
-    2 Noon
-    3 Afternoon
-    4 Sunset
-    5 Dusk
-    6 Night
-    7 Dawn
+    1 Sunrise
+    2 Morning
+    3 Noon
+    4 Afternoon
+    5 Sunset
+    6 Dusk
+    7 Night
+    8 Dawn
 
  - podNum values are defined in IoT.h
  
@@ -39,51 +39,6 @@ All text above must be included in any redistribution.
 // Austin lat/long: 30.2672° N, 97.7431° W
 float const LONGITUDE = -97.733330;
 float const LATITUDE =  30.266666;
-
-Period::Period(int hour, int minute) {
-    _hour = hour;
-    _minute = minute;
-}
-
-// hour and minute can be < 0 or too big and will be corrected
-void Period::set(int hour, int minute) {
-    _hour = hour;
-    _minute = minute;
-    if(_minute < 0) {
-        _hour--;
-        _minute += 60;
-    }
-    if(_minute >= 60) {
-        _hour++;
-        _minute -= 60;
-    }
-    if(_hour >= 24) {
-        _hour -= 24;
-    }
-    if(_hour < 0) {
-        hour += 24;
-    }
-}
-
-bool Period::operator ==(const Period& period) {
-    return period._hour == _hour && period._minute == _minute;
-}
-
-bool Period::operator >(const Period& period) {
-    if(_hour > period._hour) return true;
-    if(_hour < period._hour) return false;
-    return _minute > period._minute;
-}
-
-bool Period::operator <(const Period& period) {
-    if(_hour < period._hour) return true;
-    if(_hour > period._hour) return false;
-    return _minute < period._minute;
-}
-
-String Period::info() {
-    return String(_hour) + ":" + String(_minute);
-}
 
 /**
  * Constructor
@@ -113,10 +68,13 @@ void PartOfDay::loop()
     if(isNextMinute())
     {
         if(isNextDay()) {
-            Log.info("PartOfDay next day");
             calcSunriseSunset();
         }
         
+        if( Time.minute() % 15 == 0 ) {
+            Log("The time now is %d:%d",Time.hour(),Time.minute());
+        }
+
         int now = calcPartOfDay();
         if (now != _value) {
             Log.info("PartOfDay changed to %d", now);
@@ -143,9 +101,13 @@ bool PartOfDay::isNextDay()
 {
     if( Time.day() == _day && Time.month() == _month ) return false;
     
+    Log.info("DEBUG: month/day = %d/%d, Time says %d/%d",_month,_day,Time.month(),Time.day());
+    
     _month = Time.month();
     _day = Time.day();
 
+    Log.info("PartOfDay is next day %d:%d",_month,_day);
+    
     return true;
 }
 
@@ -178,29 +140,28 @@ void PartOfDay::calcSunriseSunset()
 
     Log.info("Sunset today %d/%d is %d:%d",Time.month(), Time.day(), sunsetHour, sunsetMinute);
 
-    _periods[SUNRISE].set(sunriseHour, sunriseMinute);
-    _periods[MORNING].set(sunriseHour, sunriseMinute+1);
-    _periods[NOON].set(12,0);
-    _periods[AFTERNOON].set(12,1);
-    _periods[SUNSET].set(sunsetHour, sunsetMinute);
-    _periods[DUSK].set(sunsetHour, sunsetMinute+1);
-    _periods[NIGHT].set(sunsetHour, sunsetMinute+30);
-    _periods[DAWN].set(sunriseHour, sunriseMinute - 30);
+    _periods[SUNRISE-1].set(sunriseHour, sunriseMinute);
+    _periods[MORNING-1].set(sunriseHour, sunriseMinute+1);
+    _periods[NOON-1].set(12,0);
+    _periods[AFTERNOON-1].set(12,1);
+    _periods[SUNSET-1].set(sunsetHour, sunsetMinute);
+    _periods[DUSK-1].set(sunsetHour, sunsetMinute+1);
+    _periods[NIGHT-1].set(sunsetHour, sunsetMinute+30);
+    _periods[DAWN-1].set(sunriseHour, sunriseMinute - 30);
 }
 
 int PartOfDay::calcPartOfDay()
 {
     Period current(Time.hour(),Time.minute());
-    Log("The time now is " + String(current.info()));
     
-    if (current > _periods[NIGHT]) return NIGHT;
-    if (current > _periods[DUSK]) return DUSK;
-    if (current > _periods[SUNSET]) return SUNSET;
-    if (current > _periods[AFTERNOON]) return AFTERNOON;
-    if (current > _periods[NOON]) return NOON;
-    if (current > _periods[MORNING]) return MORNING;
-    if (current > _periods[SUNRISE]) return SUNRISE;
-    if (current > _periods[DAWN]) return DAWN;
+    if (current > _periods[NIGHT-1]) return NIGHT;
+    if (current > _periods[DUSK-1]) return DUSK;
+    if (current > _periods[SUNSET-1]) return SUNSET;
+    if (current > _periods[AFTERNOON-1]) return AFTERNOON;
+    if (current > _periods[NOON-1]) return NOON;
+    if (current > _periods[MORNING-1]) return MORNING;
+    if (current > _periods[SUNRISE-1]) return SUNRISE;
+    if (current > _periods[DAWN-1]) return DAWN;
     return NIGHT;
 }
 
