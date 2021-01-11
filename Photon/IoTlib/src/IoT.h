@@ -40,9 +40,12 @@ All text above must be included in any redistribution.
  * Main IoT object.
  * It provides an API for creating and communicating with all others.
  */
+class UnitTest;
+
 class IoT {
 
     friend MQTTManager;
+    friend UnitTest;
 
 public:
 
