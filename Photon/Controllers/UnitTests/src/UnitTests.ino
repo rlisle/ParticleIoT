@@ -36,6 +36,12 @@ void setup() {
     Device::add(new Light(7, "blueLed", false, true));
     Device::add(new Device("test1"));
 
+    Log.info("#");
+    Log.info("#");
+    Log.info("# Starting Unit Tests");
+    Log.info("#");
+    Log.info("#");
+    
     //TODO: Test IoT
     test->iot();
     
@@ -50,7 +56,16 @@ void setup() {
     
     // TODO: Test Switch
     
-    Log.info("%d tests run, %d failed.", test->numTests, test->numTestsFailed);
+    // Print summary
+    Log.info("#");
+    Log.info("#");
+    if( test->numTests > 0 && test->numTestsFailed==0 ) {
+        Log.info("# SUCCESS! All %d Tests Passed\n#\n#",test->numTests);
+    } else {
+        Log.info("# Test Complete: %d tests run, %d failed.", test->numTests, test->numTestsFailed);
+    }
+    Log.info("#");
+    Log.info("#");
 }
 
 void loop() {

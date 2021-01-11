@@ -13,9 +13,11 @@ UnitTest::UnitTest() {
 void UnitTest::iot() {
     // Verify begin() set _mqttManager
     numTests++;
-    if( IoT::_mqttManager == NULL ) {
+    if( IoT::_mqttManager != NULL ) {
+        Log.info("Test _mqttManager set: pass")
+    } else {
         numTestsFailed++;
-        Log.error("_mqttManager not set");
+        Log.error("Test _mqttManager set: fail");
     }
 }
 
@@ -23,8 +25,22 @@ void UnitTest::device() {
     // Test buildDevicesVariable
     numTests++;
     Device::buildDevicesVariable();
-    if( globalDevicesVariable != "blueLed,test1") {
+    if( globalDevicesVariable == "blueLed,test1") {
+        Log.info("Test buildDevicesVariable: pass");
+    } else {
         numTestsFailed++;
-        Log.error("buildDevicesVariable fail.");
+        Log.error("Test buildDevicesVariable: fail");
+    }
+}
+
+void UnitTest::partOfDay() {
+    // Test PartOfDay: TODO:
+    numTests++;
+    PartOfDay *partOfDay = PartOfDay();
+    if( globalDevicesVariable == "blueLed,test1") {
+        Log.info("Test buildDevicesVariable: pass");
+    } else {
+        numTestsFailed++;
+        Log.error("Test buildDevicesVariable: fail");
     }
 }
