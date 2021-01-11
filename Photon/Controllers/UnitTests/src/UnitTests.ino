@@ -25,26 +25,25 @@
 #include <PatriotNCD8Light.h>
 #include <PatriotSwitch.h>
 
+int numTests = 0;
+int numTestsFailed = 0;
+
 // Run all tests during setup
 void setup() {
-    IoT::begin("192.168.10.184", "RonTest");
+    
+    IoT::begin("192.168.10.184", "UnitTests");
 
     Device::add(new Light(7, "blueLed", false, true));
 
     // Basic devices allow Alexa to control the name
     // and can also turn off other activities.
-    Device::add(new Device("cleaning"));
-    Device::add(new Device("sleeping"));
-    Device::add(new Device("partofday"));
-
-    int changedSleeping = Device::getChangedValue("sleeping");
-    Log.info("changedSleeping = %d",changedSleeping);
-    
-    int changedPartOfDay = Device::getChangedValue("partofday");
-    int sleeping = Device::value("sleeping");
-    int partOfDay = Device::value("partofday");
+    Device::add(new Device("test1"));
 
     //TODO: Test IoT
+    testIotBegin();
+    
+    //TODO: Test basic Device
+    testDevice();
     
     //TODO: Test PartOfDay
     
@@ -54,7 +53,7 @@ void setup() {
     
     // TODO: Test Switch
     
-    Log.info("setAllInsideLights %d",value);
+    Log.info("%d tests run, %d failed.", numTests, numTestsFailed);
 }
 
 void loop() {
@@ -63,4 +62,23 @@ void loop() {
     
     //TODO: Maybe blink the led or other visual checks
 
+}
+
+void testIot() {
+    // Verify begin() set _mqttManager
+    numTests++;
+    if( IoT::_mqttManager == NULL ) {
+        numTestsFailed++;
+        Log.error("_mqttManager not set");
+    }
+}
+
+void testDevice() {
+    // Test buildDevicesVariable
+    numTests++;
+    Device::buildDevicesVariable();
+    if( globalDevicesVariable != "blueLed,test1") {
+        numTestsFailed++;
+        Log.error("buildDevicesVariable fail.");
+    }
 }
