@@ -1,7 +1,7 @@
 /**
-MQTTManager.cpp
+PubSub.cpp
 
-This class handles all MQTT interactions.
+This class handles all Particle.io PubSub interactions.
 
 http://www.github.com/rlisle/Patriot
 
@@ -11,21 +11,22 @@ BSD license, check LICENSE for more information.
 All text above must be included in any redistribution.
 
 */
-#include "MQTTManager.h"
+#include "PubSub.h"
 #include "constants.h"
 #include "device.h"
 #include "IoT.h"
 
-#define MQTT_TIMEOUT_SECONDS 60*5
-#define MQTT_ALIVE_SECONDS 60
+//#define MQTT_TIMEOUT_SECONDS 60*5
+#define ALIVE_MSG_SECONDS 60 * 60
 
-MQTTManager::MQTTManager(String brokerIP, String connectID, String controllerName)
+PubSub::PubSub(String controllerName)
 {
     _controllerName = controllerName.toLowerCase();
     _logging = 0;
 
-    // We'll want to start with ALL whenever modifying code.
-    // Use MQTT to switch to error when done testing or vs. a vs.
+    // We'll want to start with ALL whenever debugging new code.
+    // Beware of Particle messages limits though (about 200k = 2/minute)
+    // Use PubSub to switch to error when done testing or vs. a vs.
     _logLevel = LOG_LEVEL_ERROR;
 
     Time.zone(-6.0);
@@ -33,94 +34,51 @@ MQTTManager::MQTTManager(String brokerIP, String connectID, String controllerNam
     //TODO: do we need this, and what should we pass?
     //const LogCategoryFilters &filters) : LogHandler(level, filters)
 
-    _mqtt =  new MQTT((char *)brokerIP.c_str(), 1883, IoT::mqttHandler);
-    connect(connectID);
-}
-
-//TODO: If MQTT doesn't connect, then start 
-void MQTTManager::connect(String connectID) {
-
-    _connectID = connectID;
-    _lastMQTTtime = Time.now();
-    _lastAliveTime = _lastMQTTtime;
-
-    if(_mqtt == NULL) {
-        Log.error("ERROR! MQTTManager: connect called but object null");
-    }
-
-    if(_mqtt->isConnected()) {
-        Log.info("MQTT is connected, so reconnecting...");
-        LogManager::instance()->removeHandler(this);
-        _mqtt->disconnect();
-    }
-
-    _mqtt->connect(connectID);
-    if (_mqtt->isConnected()) {
-        if(_mqtt->subscribe(kPublishName+"/#") == false) {
-            Log.error("Unable to subscribe to MQTT " + kPublishName + "/#");
-        }
-    } else {
-        // This won't do anything because our handler isn't connected yet.
-        Log.error("MQTT is NOT connected! Check MQTT IP address");
-    }
-    // Looks good, now register our MQTT LogHandler
-    LogManager::instance()->addHandler(this);
-
-    Log.info("MQTT Connected");
+    //TODO: move subscribe code from IoT to here?
     
 }
 
-bool MQTTManager::publish(String topic, String message) {
-    if(_mqtt != NULL && _mqtt->isConnected()) {
-        _mqtt->publish(topic,message);
+bool PubSub::publish(String topic, String message) {
+    if(_pubSub != NULL) {
+        _pubSub->publish(topic,message);
         return true;
     }
     return false;
 }
 
-void MQTTManager::loop()
+void PubSub::loop()
 {
-    if(_mqtt != NULL && _mqtt->isConnected()) {
-        _mqtt->loop();
+    if(_pubSub != NULL) {
         sendAlivePeriodically()
+        reconnectCheck();
     }
-
-    reconnectCheck();
 }
 
-void MQTTManager::sendAlivePeriodically() {
+void PubSub::sendAlivePeriodically() {
     system_tick_t secondsSinceLastAlive = Time.now() - _lastAliveTime;
-    if(secondsSinceLastAlive > MQTT_ALIVE_SECONDS) {
+    if(secondsSinceLastAlive > ALIVE_MSG_SECONDS) {
         secondsSinceLastAlive = Time.now()
-        publish("patriot/alive", _controllerName)
+        publish("patriot/alive", _controllerName)   //TODO: add timestamp, maybe use Log instead
     }
 }
 
-void MQTTManager::reconnectCheck() {
-    system_tick_t secondsSinceLastMessage = Time.now() - _lastMQTTtime;
-    if(secondsSinceLastMessage > MQTT_TIMEOUT_SECONDS) {
-        Log.warn("Connection lost, reconnecting. _lastMQTTtime = " + String(_lastMQTTtime) + ", Time.now() = " + String(Time.now()));
-        connect(_connectID);
-    }
-}
-
-void MQTTManager::mqttHandler(char* rawTopic, byte* payload, unsigned int length) {
-
-    char p[length + 1];
-    memcpy(p, payload, length);
-    p[length] = 0;
-    String message(p);
-    String topic(rawTopic);
-
-    _lastMQTTtime = Time.now();
-
-    parseMessage(topic.toLowerCase(), message.toLowerCase());
-}
+//void PubSub::msgHandler(char* rawTopic, byte* payload, unsigned int length) {
+//
+//    char p[length + 1];
+//    memcpy(p, payload, length);
+//    p[length] = 0;
+//    String message(p);
+//    String topic(rawTopic);
+//
+//    _lastMQTTtime = Time.now();
+//
+//    parseMessage(topic.toLowerCase(), message.toLowerCase());
+//}
 
 //Mark - Parser
 
 // topic and messages are already lowercase
-void MQTTManager::parseMessage(String topic, String message)
+void PubSub::parseMessage(String topic, String message)
 {
     // This creates an infinite loop. Don't do it.
     //log("Parser received: " + topic + ", " + message, LogDebug);
@@ -209,7 +167,7 @@ void MQTTManager::parseMessage(String topic, String message)
     }
 }
 
-int MQTTManager::parseValue(String message)
+int PubSub::parseValue(String message)
 {
     if(message == "on") {
         return 100;
@@ -219,7 +177,7 @@ int MQTTManager::parseValue(String message)
     return message.toInt();
 }
 
-void MQTTManager::parseLogLevel(String message) {
+void PubSub::parseLogLevel(String message) {
     LogLevel level = LOG_LEVEL_ERROR;
     if (message == "none") level = LOG_LEVEL_NONE;         // 70
     else if (message == "error") level = LOG_LEVEL_ERROR;  // 50
@@ -234,7 +192,7 @@ void MQTTManager::parseLogLevel(String message) {
 
 // The following methods are taken from Particle FW, specifically spark::StreamLogHandler.
 // See https://github.com/spark/firmware/blob/develop/wiring/src/spark_wiring_logging.cpp
-const char* MQTTManager::extractFileName(const char *s) {
+const char* PubSub::extractFileName(const char *s) {
     const char *s1 = strrchr(s, '/');
     if (s1) {
         return s1 + 1;
@@ -242,7 +200,7 @@ const char* MQTTManager::extractFileName(const char *s) {
     return s;
 }
 
-const char* MQTTManager::extractFuncName(const char *s, size_t *size) {
+const char* PubSub::extractFuncName(const char *s, size_t *size) {
     const char *s1 = s;
     for (; *s; ++s) {
         if (*s == ' ') {
@@ -256,7 +214,7 @@ const char* MQTTManager::extractFuncName(const char *s, size_t *size) {
 }
 
 // This method is how we are called by the LogManager
-void MQTTManager::logMessage(const char *msg, LogLevel level, const char *category, const LogAttributes &attr) {
+void PubSub::logMessage(const char *msg, LogLevel level, const char *category, const LogAttributes &attr) {
     String s;
 
 //    LOG_LEVEL_ALL = 1
@@ -323,7 +281,7 @@ void MQTTManager::logMessage(const char *msg, LogLevel level, const char *catego
 }
 
 // This is our formatter. We can format messages however we want.
-void MQTTManager::log(const char *category, String message) {
+void PubSub::log(const char *category, String message) {
     String time = Time.format(Time.now(), "%a %H:%M");
 
 //    if(!_logging && strcmp(category, "app") == 0) {

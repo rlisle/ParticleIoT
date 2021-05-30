@@ -1,7 +1,7 @@
 /**
- MQTTManager.h
+ PubSub.h
  
- This class handles all MQTT interactions.
+ This class handles all Particle.io PubSub interactions.
  
  Note: to avoid making this a singleton,
  the caller must provide global callback handlers (see externs).
@@ -16,32 +16,27 @@
  */
 #pragma once
 #include "Particle.h"
-#include "MQTT.h"
 
-class MQTTManager : public LogHandler
+class PubSub : public LogHandler
 {
 public:
     LogLevel    _logLevel;
 
-    MQTTManager(String brokerIP, String connectID, String controllerName);
+    PubSub(String controllerName);
     
     bool        publish(String topic, String message);
     void        parseMessage(String topic, String message);
     void        loop();
-    void        mqttHandler(char* topic, byte* payload, unsigned int length);
+    void        handler(char* topic, byte* payload, unsigned int length);
         
 private:
-    MQTT          *_mqtt;
     String        _controllerName;
-    system_tick_t _lastMQTTtime;
+    system_tick_t _lastMsgTime;
     system_tick_t _lastAliveTime;   // Send out alive messages periodically
-    String        _connectID;       // Used when reconnecting
     
     int       _logging; // a counting semaphore to prevent recursion
 
     void      (*_callback)(char*,uint8_t*,unsigned int);
-    void      connect(String connectID);
-    void      reconnectCheck();
     int       parseValue(String message);
     void      parseLogLevel(String message);
     

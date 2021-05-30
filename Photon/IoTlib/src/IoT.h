@@ -19,7 +19,7 @@ All text above must be included in any redistribution.
 #include "Particle.h"
 #include "constants.h"
 #include "device.h"
-#include "MQTTManager.h"
+#include "PubSub.h"
 
 // Do NOT use 0 for this type value
 // because 0 will invoke previous restoration
@@ -45,18 +45,18 @@ All text above must be included in any redistribution.
  */
 class IoT {
 
-    friend MQTTManager;
+    friend PubSub;
 
 public:
 
     /**
-     * begin(byte * brokerIP, String connectID)
+     * begin(String controllerName)
      * Call begin to initialize the object.
      * This is done here instead of the constructor to improve debugging.
      **/
-    static void begin(String brokerIP, String controllerName);
+    static void begin(String controllerName);
 
-    static void mqttPublish(String topic, String message);
+    static void publish(String topic, String message);
 
     /**
      * Loop needs to be called periodically
@@ -68,13 +68,12 @@ public:
      */
     static int handleLightSwitch(String name);        // Requires matching Light & LightSwitch type names
     
-    static int publishValue(String name, int value);  // Sends MQTT message
+    static int publishValue(String name, int value);  // Sends particle.io PubSub message
     
 private:
     static String _controllerName;
-    static MQTTManager* _mqttManager;
+    static PubSub* _pubSub;
 
     static void subscribeHandler(const char *eventName, const char *rawData);
     static void periodicReset();
-    static void mqttHandler(char* topic, byte* payload, unsigned int length);
 };

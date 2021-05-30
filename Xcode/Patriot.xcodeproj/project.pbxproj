@@ -59,8 +59,8 @@
 		E4849C552566AB3C00A39734 /* IoT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IoT.h; path = ../Photon/IoTlib/src/IoT.h; sourceTree = "<group>"; };
 		E4849C5A2566AB3C00A39734 /* IoT.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IoT.cpp; path = ../Photon/IoTlib/src/IoT.cpp; sourceTree = "<group>"; };
 		E4849C5C2566AB3C00A39734 /* device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = device.h; path = ../Photon/IoTlib/src/device.h; sourceTree = "<group>"; };
-		E4849C622566AB3C00A39734 /* MQTTManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MQTTManager.cpp; path = ../Photon/IoTlib/src/MQTTManager.cpp; sourceTree = "<group>"; };
-		E4849C662566AB3C00A39734 /* MQTTManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MQTTManager.h; path = ../Photon/IoTlib/src/MQTTManager.h; sourceTree = "<group>"; };
+		E4849C622566AB3C00A39734 /* PubSub.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PubSub.cpp; path = ../Photon/IoTlib/src/PubSub.cpp; sourceTree = "<group>"; };
+		E4849C662566AB3C00A39734 /* PubSub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PubSub.h; path = ../Photon/IoTlib/src/PubSub.h; sourceTree = "<group>"; };
 		E4849C6D2566ABFD00A39734 /* RonTest.ino */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; name = RonTest.ino; path = ../Photon/Controllers/RonTest/src/RonTest.ino; sourceTree = "<group>"; };
 		E4849C722566B2AF00A39734 /* RearPanel.ino */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; name = RearPanel.ino; path = ../Photon/Controllers/RearPanel/src/RearPanel.ino; sourceTree = "<group>"; };
 		E4849C732566B2E600A39734 /* FrontPanel.ino */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; name = FrontPanel.ino; path = ../Photon/Controllers/FrontPanel/src/FrontPanel.ino; sourceTree = "<group>"; };
@@ -184,8 +184,8 @@
 				2755DBE4259DFA3900971ABA /* device.cpp */,
 				E4849C5A2566AB3C00A39734 /* IoT.cpp */,
 				E4849C552566AB3C00A39734 /* IoT.h */,
-				E4849C622566AB3C00A39734 /* MQTTManager.cpp */,
-				E4849C662566AB3C00A39734 /* MQTTManager.h */,
+				E4849C622566AB3C00A39734 /* PubSub.cpp */,
+				E4849C662566AB3C00A39734 /* PubSub.h */,
 			);
 			name = IoTlib;
 			sourceTree = "<group>";
@@ -335,7 +335,7 @@
 			attributes = {
 				LastUpgradeCheck = 1220;
 			};
-			buildConfigurationList = E4849C4D2566A90700A39734 /* Build configuration list for PBXProject "Xcode" */;
+			buildConfigurationList = E4849C4D2566A90700A39734 /* Build configuration list for PBXProject "Patriot" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -367,7 +367,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4849C4D2566A90700A39734 /* Build configuration list for PBXProject "Xcode" */ = {
+		E4849C4D2566A90700A39734 /* Build configuration list for PBXProject "Patriot" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4849C4E2566A90700A39734 /* Debug */,

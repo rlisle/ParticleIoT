@@ -20,17 +20,17 @@ All text above must be included in any redistribution.
 
 // Static Variables
 Device*      Device::_devices = NULL;
-MQTTManager* IoT::_mqttManager = NULL;
+PubSub* IoT::_pubSub = NULL;
 
 /**
  * Begin gets everything going.
  * It must be called exactly once by the sketch
  */
-void IoT::begin(String brokerIP, String controllerName)
+void IoT::begin(String controllerName)
 {
-    String connectID = controllerName + "Id";
-    _mqttManager = new MQTTManager(brokerIP, connectID, controllerName);
+    _pubSub = new PubSub(controllerName);
     
+    //TODO: Move to PubSub
     // Subscribe to events. There is a 1/second limit for events.
     Particle.subscribe(kPublishName, IoT::subscribeHandler, MY_DEVICES);
 
@@ -38,10 +38,10 @@ void IoT::begin(String brokerIP, String controllerName)
     Device::expose();
 }
 
-void IoT::mqttPublish(String topic, String message)
+void IoT::publish(String topic, String message)
 {
-    if (_mqttManager != NULL) {
-        _mqttManager->publish(topic, message);
+    if (_pubSub != NULL) {
+        _pubSub->publish(topic, message);
     }
 }
 
@@ -53,8 +53,8 @@ void IoT::loop()
 {
     Device::loopAll();
 
-    if (_mqttManager != NULL) {
-        _mqttManager->loop();
+    if (_pubSub != NULL) {
+        _pubSub->loop();
     }
 }
 
@@ -70,24 +70,10 @@ void IoT::subscribeHandler(const char *eventName, const char *rawData)
     
     Log.info("Particle.io subscribe received data: '"+event+"', '"+data+"'");
     
-    if (_mqttManager != NULL) {
-        _mqttManager->parseMessage(event.toLowerCase(), data.toLowerCase());
+    if (_pubSub != NULL) {
+        _pubSub->parseMessage(event.toLowerCase(), data.toLowerCase());
     }
 }
-
-/**
- MQTT Subscribe Handler
-*/
-void IoT::mqttHandler(char* rawTopic, byte* payload, unsigned int length) {
-
-    if(_mqttManager != NULL) {
-        _mqttManager->mqttHandler(rawTopic, payload, length);
-    }
-}
-
-/**
- Sketch Programming Support
- */
 
 int IoT::handleLightSwitch(String name) {
     int lightSwitch = Device::getChangedValue(name+"Switch");
@@ -110,8 +96,8 @@ int IoT::handleLightSwitch(String name) {
  return: 0 success, -1 MQTT error
  */
 int IoT::publishValue(String name, int value) {
-    if(_mqttManager != NULL) {
-        _mqttManager->publish("patriot/" + name, String(value));
+    if(_pubSub != NULL) {
+        _pubSub->publish("patriot/" + name, String(value));
         return 0;
     }
     return -1;
