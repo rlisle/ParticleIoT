@@ -4,7 +4,7 @@
  Uses the MCP23017
  
  Features:
- - Switch inputs converted to patriot MQTT messages
+ - Switch inputs converted to patriot messages
  - Supports multiple boards
 
  It is expected that the input will be connected to a switch
@@ -32,7 +32,7 @@
  * Constructor
  * @param address is the board address set by jumpers (0-7)
  * @param switchNum is the switch number on the NCD 8 GPIO board (1-8)
- * @param name String name used in MQTT messages
+ * @param name String name used in messages
  */
 NCD16Switch::NCD16Switch(int address, int switchNum, String name)
                 : Device(name)
@@ -126,7 +126,7 @@ bool NCD16Switch::isSwitchOn() {
 void NCD16Switch::loop()
 {
     // Poll switch periodically (.25 seconds?),
-    // and publish MQTT message if it changes
+    // and publish message if it changes
     long current = millis();
     if(current > _lastPollTime + POLL_INTERVAL_MILLIS)
     {

@@ -16,15 +16,12 @@ All text above must be included in any redistribution.
 #include <IoT.h>
 #include <PatriotNCD8Switch.h>
 
-String mqttServerIP = "192.168.10.184"; // Set this to your MQTT broker IP
-
 IoT *iot;
 
 void setup() {
     iot = IoT::getInstance();
     iot->setControllerName("MyTest");
     iot->begin();
-    iot->connectMQTT(mqttServerIP, "myPatriotTest1");   // Whatever you want here
 
     byte address = 0x00;    // No jumpers set
     Switch *switch1 = new Switch(address, 0, "switch1");

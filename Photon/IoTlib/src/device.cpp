@@ -179,6 +179,6 @@ void Device::buildDevicesVariable()
 // Publish each device name and its value
 void Device::publishStates(String controllerName) {
     for (Device* ptr = _devices; ptr != NULL; ptr = ptr->_next) {
-        IoT::mqttPublish("debug/"+controllerName+"/"+ptr->name()+"/state", String(ptr->_value));
+        IoT::publish("debug/"+controllerName+"/"+ptr->name()+"/state", String(ptr->_value));
     }
 }

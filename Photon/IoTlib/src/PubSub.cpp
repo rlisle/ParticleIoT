@@ -16,7 +16,7 @@ All text above must be included in any redistribution.
 #include "device.h"
 #include "IoT.h"
 
-//#define MQTT_TIMEOUT_SECONDS 60*5
+#define MESSAGE_TIMEOUT_SECONDS 60*60*2
 #define ALIVE_MSG_SECONDS 60 * 60
 
 PubSub::PubSub(String controllerName)
@@ -38,42 +38,22 @@ PubSub::PubSub(String controllerName)
     
 }
 
-bool PubSub::publish(String topic, String message) {
-    if(_pubSub != NULL) {
-        _pubSub->publish(topic,message);
-        return true;
-    }
-    return false;
+void PubSub::publish(String topic, String message) {
+    Particle.publish(topic,message);
 }
 
 void PubSub::loop()
 {
-    if(_pubSub != NULL) {
-        sendAlivePeriodically()
-        reconnectCheck();
-    }
+    sendAlivePeriodically();
 }
 
 void PubSub::sendAlivePeriodically() {
     system_tick_t secondsSinceLastAlive = Time.now() - _lastAliveTime;
     if(secondsSinceLastAlive > ALIVE_MSG_SECONDS) {
-        secondsSinceLastAlive = Time.now()
-        publish("patriot/alive", _controllerName)   //TODO: add timestamp, maybe use Log instead
+        secondsSinceLastAlive = Time.now();
+        publish("patriot/alive", _controllerName);   //TODO: add timestamp, maybe use Log instead
     }
 }
-
-//void PubSub::msgHandler(char* rawTopic, byte* payload, unsigned int length) {
-//
-//    char p[length + 1];
-//    memcpy(p, payload, length);
-//    p[length] = 0;
-//    String message(p);
-//    String topic(rawTopic);
-//
-//    _lastMQTTtime = Time.now();
-//
-//    parseMessage(topic.toLowerCase(), message.toLowerCase());
-//}
 
 //Mark - Parser
 
@@ -275,7 +255,7 @@ void PubSub::logMessage(const char *msg, LogLevel level, const char *category, c
         s.concat(']');
     }
 
-    //TODO: If MQTT not connected, write to Serial instead
+    //TODO: If PubSub not connected, write to Serial instead
 //    Serial.println(s);
     log(category, s);
 }

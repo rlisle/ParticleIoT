@@ -119,5 +119,5 @@ void Switch::notify()
 {
     String topic = "patriot/" + _name;
     String message = String(_value);
-    IoT::mqttPublish(topic,message);
+    IoT::publish(topic,message);
 }

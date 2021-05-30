@@ -1,22 +1,22 @@
 # PatriotPartOfDay
 
-A Patriot plugin to provide MQTT partofday messages for dawn, sunrise,
+A Patriot plugin to provide partofday messages for dawn, sunrise,
 morning, noon, afternoon, sunset, dusk, and night
 
 
 ## Usage
 
 Include this library in one Photon sketch to provide partofday states
-for use by all controllers on the same MQTT network.
+for use by all controllers on the same network and particle.io account.
 Refer to the more complex examples in the main Patriot IoT examples
  directory.
 
 This example creates a single PartOfDay device to broadcast
-messages to the MQTT network.
+messages to the particle.io network.
 
 You can use the Particle.io console to monitor these states via the
-published 'States' variable, or observe them in realtime on MQTT
-(eg. using mosquitto_sub)
+published 'States' variable, or observe them in realtime on particle.io
+console.
 
 ```
 #include <IoT.h>

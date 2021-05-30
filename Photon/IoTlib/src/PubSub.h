@@ -24,7 +24,7 @@ public:
 
     PubSub(String controllerName);
     
-    bool        publish(String topic, String message);
+    void        publish(String topic, String message);
     void        parseMessage(String topic, String message);
     void        loop();
     void        handler(char* topic, byte* payload, unsigned int length);
@@ -39,7 +39,8 @@ private:
     void      (*_callback)(char*,uint8_t*,unsigned int);
     int       parseValue(String message);
     void      parseLogLevel(String message);
-    
+    void      sendAlivePeriodically();
+
     // LogHandler methods
     const char* extractFileName(const char *s);
     const char* extractFuncName(const char *s, size_t *size);

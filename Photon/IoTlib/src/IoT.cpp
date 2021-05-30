@@ -93,7 +93,7 @@ int IoT::handleLightSwitch(String name) {
  publishValue()
  param: name of state
  param: value to assign state
- return: 0 success, -1 MQTT error
+ return: 0 success, -1 error
  */
 int IoT::publishValue(String name, int value) {
     if(_pubSub != NULL) {

@@ -3,7 +3,7 @@ Patriot PartOfDay Example
 
 This example shows how to use the Patriot PartOfDay plugin
 It instantiates the plugin which will then generate
-MQTT messages/states for "partofday" with the values:
+messages/states for "partofday" with the values:
   * Dawn
   * Sunrise
   * Morning

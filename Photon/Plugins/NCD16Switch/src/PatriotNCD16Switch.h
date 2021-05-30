@@ -2,7 +2,7 @@
  NCD GPIO Switch control
 
  Features:
- - Switch inputs converted to patriot MQTT messages
+ - Switch inputs converted to patriot messages
  - Supports multiple boards
 
  - Supports MCP23017
@@ -41,8 +41,8 @@ public:
     void    begin();
     void    loop();
     
-    // Override to prevent MQTT from setting _percent.
+    // Override to prevent message from setting _percent.
     // Needed because of no auto behavior.
-    // Our own generated MQTT message will reset _percent back to 0.
+    // Our own generated message will reset _percent back to 0.
     void setPercent(int percent) { return; };
 };

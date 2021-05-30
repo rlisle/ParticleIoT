@@ -21,15 +21,12 @@ All text above must be included in any redistribution.
 #include <IoT.h>
 #include <PatriotLight.h>
 
-String mqttServer = "192.168.10.184";
-
 IoT *iot;
 
 void setup() {
     iot = IoT::getInstance();
     iot->setControllerName("myPhoton");
     iot->begin();
-    iot->connectMQTT(mqttServer, "PatriotRearPanel1", true);
 
     // Define devices
     iot->addDevice(new Light(A3, "Porch"));
