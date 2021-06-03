@@ -68,7 +68,8 @@ void IoT::subscribeHandler(const char *eventName, const char *rawData)
     String data = String(rawData).trim();
     String event(eventName);
     
-    Log.info("Particle.io subscribe received data: '"+event+"', '"+data+"'");
+    // Bug: infinite loop since log writes to pubsub
+    //Log.info("Particle.io subscribe received data: '"+event+"', '"+data+"'");
     
     if (_pubSub != NULL) {
         _pubSub->parseMessage(event.toLowerCase(), data.toLowerCase());
