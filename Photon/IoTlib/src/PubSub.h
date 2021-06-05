@@ -33,8 +33,6 @@ private:
     String        _controllerName;
     system_tick_t _lastAliveTime;   // Send out alive messages periodically
     
-prevent recursion
-
     void      (*_callback)(char*,uint8_t*,unsigned int);
     int       parseValue(String message);
     void      parseLogLevel(String message);

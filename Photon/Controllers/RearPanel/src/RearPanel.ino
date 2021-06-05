@@ -148,12 +148,12 @@ void loop() {
     }
     
     // SWITCHES
-//    IoT::handleLightSwitch("OfficeCeiling");
-//    IoT::handleLightSwitch("Loft");
-//    IoT::handleLightSwitch("RampPorch");
-//    IoT::handleLightSwitch("RampAwning");
-//    IoT::handleLightSwitch("RearPorch");
-//    IoT::handleLightSwitch("RearAwning");
+    IoT::handleLightSwitch("OfficeCeiling");
+    IoT::handleLightSwitch("Loft");
+    IoT::handleLightSwitch("RampPorch");
+    IoT::handleLightSwitch("RampAwning");
+    IoT::handleLightSwitch("RearPorch");
+    IoT::handleLightSwitch("RearAwning");
 }
 
 void setAllActivities(int value) {
