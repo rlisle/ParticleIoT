@@ -16,13 +16,11 @@ All text above must be included in any redistribution.
 #include "device.h"
 #include "IoT.h"
 
-#define MESSAGE_TIMEOUT_SECONDS 60*60*2
-#define ALIVE_MSG_SECONDS 60 * 60
+#define ALIVE_MSG_SECONDS 60 * 15
 
 PubSub::PubSub(String controllerName)
 {
     _controllerName = controllerName.toLowerCase();
-    _logging = 0;
 
     // We'll want to start with ALL whenever debugging new code.
     // Beware of Particle messages limits though (about 200k = 2/minute)
@@ -30,16 +28,10 @@ PubSub::PubSub(String controllerName)
     _logLevel = LOG_LEVEL_ERROR;
 
     Time.zone(-6.0);
-    
-    //TODO: do we need this, and what should we pass?
-    //const LogCategoryFilters &filters) : LogHandler(level, filters)
-
-    //TODO: move subscribe code from IoT to here?
-    
 }
 
 void PubSub::publish(String topic, String message) {
-//    Particle.publish(topic,message);
+    Particle.publish(topic,message);
 }
 
 void PubSub::loop()
@@ -50,8 +42,8 @@ void PubSub::loop()
 void PubSub::sendAlivePeriodically() {
     system_tick_t secondsSinceLastAlive = Time.now() - _lastAliveTime;
     if(secondsSinceLastAlive > ALIVE_MSG_SECONDS) {
-        secondsSinceLastAlive = Time.now();
-//        publish("patriot/alive", _controllerName);   //TODO: add timestamp, maybe use Log instead
+        _lastAliveTime = Time.now();
+        publish("patriot/alive", _controllerName);   //TODO: add timestamp, maybe use Log instead
     }
 }
 
@@ -87,7 +79,7 @@ void PubSub::parseMessage(String topic, String message)
         // MEMORY
         } else if(subtopic == "memory") {
             if(message == _controllerName) {
-                //publish( "debug/"+_controllerName, String::format("Free memory = %d", System.freeMemory()));
+                publish( "debug/"+_controllerName, String::format("Free memory = %d", System.freeMemory()));
             }
             
         // PING
@@ -95,7 +87,7 @@ void PubSub::parseMessage(String topic, String message)
             // Respond if ping is addressed to us
             if(message == _controllerName) {
                 Log.trace("Ping addressed to us");
-                //publish(kPublishName + "/pong", _controllerName);
+                publish(kPublishName + "/pong", _controllerName);
             }
             
         // PONG
@@ -169,106 +161,3 @@ void PubSub::parseLogLevel(String message) {
 
     _logLevel = level;
 }
-
-// The following methods are taken from Particle FW, specifically spark::StreamLogHandler.
-// See https://github.com/spark/firmware/blob/develop/wiring/src/spark_wiring_logging.cpp
-const char* PubSub::extractFileName(const char *s) {
-    const char *s1 = strrchr(s, '/');
-    if (s1) {
-        return s1 + 1;
-    }
-    return s;
-}
-
-const char* PubSub::extractFuncName(const char *s, size_t *size) {
-    const char *s1 = s;
-    for (; *s; ++s) {
-        if (*s == ' ') {
-            s1 = s + 1;                                                                                                                         // Skip return type
-        } else if (*s == '(') {
-            break;                                                                                                                         // Skip argument types
-        }
-    }
-    *size = s - s1;
-    return s1;
-}
-
-// This method is how we are called by the LogManager
-void PubSub::logMessage(const char *msg, LogLevel level, const char *category, const LogAttributes &attr) {
-    String s;
-
-//    LOG_LEVEL_ALL = 1
-//    LOG_LEVEL_TRACE = 1
-//    LOG_LEVEL_INFO = 30
-//    LOG_LEVEL_WARN= 40
-//    LOG_LEVEL_ERROR = 50
-//    LOG_LEVEL_NONE = 70
-    if (level < _logLevel) return;
-    
-    // Source file
-    if (attr.has_file) {
-        s = extractFileName(attr.file);                                                                                 // Strip directory path
-        s.concat(s);                                                                                 // File name
-        if (attr.has_line) {
-            s.concat(":");
-            s.concat(String(attr.line));                                                                                                                         // Line number
-        }
-        if (attr.has_function) {
-            s.concat(", ");
-        } else {
-            s.concat(": ");
-        }
-    }
-
-    // Function name
-    if (attr.has_function) {
-        size_t n = 0;
-        s = extractFuncName(attr.function, &n);                                                                                 // Strip argument and return types
-        s.concat(s);
-        s.concat("(): ");
-    }
-
-    // Level
-    s.concat(levelName(level));
-    s.concat(": ");
-
-    // Message
-    if (msg) {
-        s.concat(msg);
-    }
-
-    // Additional attributes
-    if (attr.has_code || attr.has_details) {
-        s.concat(" [");
-        // Code
-        if (attr.has_code) {
-            s.concat(String::format("code = %p", (intptr_t)attr.code));
-        }
-        // Details
-        if (attr.has_details) {
-            if (attr.has_code) {
-                s.concat(", ");
-            }
-            s.concat("details = ");
-            s.concat(attr.details);
-        }
-        s.concat(']');
-    }
-
-    //TODO: If PubSub not connected, write to Serial instead
-//    Serial.println(s);
-    log(category, s);
-}
-
-// This is our formatter. We can format messages however we want.
-void PubSub::log(const char *category, String message) {
-    String time = Time.format(Time.now(), "%a %H:%M");
-
-//    if(!_logging && strcmp(category, "app") == 0) {
-    if(!_logging) {
-        _logging++;
-        //publish("patriot/log/"+_controllerName, time + " " + message);
-        _logging--;
-    }
-}
-

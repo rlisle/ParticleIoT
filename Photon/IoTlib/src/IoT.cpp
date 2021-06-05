@@ -41,7 +41,7 @@ void IoT::begin(String controllerName)
 void IoT::publish(String topic, String message)
 {
     if (_pubSub != NULL) {
-//        _pubSub->publish(topic, message);
+        _pubSub->publish(topic, message);
     }
 }
 
@@ -98,7 +98,7 @@ int IoT::handleLightSwitch(String name) {
  */
 int IoT::publishValue(String name, int value) {
     if(_pubSub != NULL) {
-//        _pubSub->publish("patriot/" + name, String(value));
+        _pubSub->publish("patriot/" + name, String(value));
         return 0;
     }
     return -1;

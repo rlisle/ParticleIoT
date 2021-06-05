@@ -22,6 +22,10 @@ Author: Ron Lisle
 #define ADDRESS 1      // PWM board address A0 jumper set
 #define I2CR4IO4 0x20  // 4xRelay+4GPIO address
 
+// Use primary serial over USB interface for logging output
+//SerialLogHandler logHandler;
+
+
 void setup() {
     IoT::begin("RearPanel");
 
@@ -54,7 +58,7 @@ void setup() {
     // More available inputs A6, A7, TX, RX - use for door switch, motion detector, etc.
 
     // Activities/States - define for every other state
-    // Be careful to only define in 1 (this) controller
+    // Be careful to only define in 1 (this) controller (fixed now?)
     Device::add(new Device("sleeping"));
     Device::add(new Device("cleaning"));
     Device::add(new Device("watching"));    // TODO: move to front controller?
