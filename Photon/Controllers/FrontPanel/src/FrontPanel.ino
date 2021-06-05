@@ -52,16 +52,16 @@ void setup() {
     Device::add(new NCD8Light(ADDRESS, 7, "FrontPorch", 2));
 
     // Switches
-//    Device::add(new Switch(A5, "CabinetsSwitch"));
-//    Device::add(new Switch(A6, "RightTrimSwitch"));
-//    Device::add(new Switch(A7, "SinkSwitch"));
-//    Device::add(new Switch(RX, "KitchenCeilingSwitch"));
-//    Device::add(new Switch(TX, "LeftTrimSwitch"));
-//    Device::add(new Switch(A1, "CeilingSwitch"));
-//    Device::add(new Switch(A2, "DoorSideSwitch"));
-//    Device::add(new Switch(A3, "OtherSideSwitch"));
-//    Device::add(new Switch(A4, "FrontPorchSwitch"));
-//    Device::add(new Switch(A0, "FrontAwningSwitch"));
+    Device::add(new Switch(A5, "CabinetsSwitch"));
+    Device::add(new Switch(A6, "RightTrimSwitch"));
+    Device::add(new Switch(A7, "SinkSwitch"));
+    Device::add(new Switch(RX, "KitchenCeilingSwitch"));
+    Device::add(new Switch(TX, "LeftTrimSwitch"));
+    Device::add(new Switch(A1, "CeilingSwitch"));
+    Device::add(new Switch(A2, "DoorSideSwitch"));
+    Device::add(new Switch(A3, "OtherSideSwitch"));
+    Device::add(new Switch(A4, "FrontPorchSwitch"));
+    Device::add(new Switch(A0, "FrontAwningSwitch"));
 
     // Other devices we monitor
     // TODO: could we define these automatically when getChangedValue is called?
@@ -110,16 +110,16 @@ void loop() {
 }
 
 void handleLightSwitches() {
-//    IoT::handleLightSwitch("Ceiling");
-//    IoT::handleLightSwitch("KitchenCeiling");
-//    IoT::handleLightSwitch("Sink");
-//    IoT::handleLightSwitch("Cabinets");
-//    IoT::handleLightSwitch("RightTrim");
-//    IoT::handleLightSwitch("LeftTrim");
-//    IoT::handleLightSwitch("DoorSide");
-//    IoT::handleLightSwitch("OtherSide");
-//    IoT::handleLightSwitch("FrontPorch");
-//    IoT::handleLightSwitch("FrontAwning");
+    IoT::handleLightSwitch("Ceiling");
+    IoT::handleLightSwitch("KitchenCeiling");
+    IoT::handleLightSwitch("Sink");
+    IoT::handleLightSwitch("Cabinets");
+    IoT::handleLightSwitch("RightTrim");
+    IoT::handleLightSwitch("LeftTrim");
+    IoT::handleLightSwitch("DoorSide");
+    IoT::handleLightSwitch("OtherSide");
+    IoT::handleLightSwitch("FrontPorch");
+    IoT::handleLightSwitch("FrontAwning");
 }
 
 void handleSleepingChange(int sleeping) {
