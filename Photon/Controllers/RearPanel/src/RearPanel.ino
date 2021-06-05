@@ -29,7 +29,7 @@ void setup() {
     Device::add(new PartOfDay());
 
     Device::add(new Curtain(I2CR4IO4, 0, "Curtain"));
-//    Device::add(new NCD4Switch(I2CR4IO4, 0, "OfficeDoor"));
+    Device::add(new NCD4Switch(I2CR4IO4, 0, "OfficeDoor"));
 
     // Inside Lights
     Device::add(new NCD8Light(ADDRESS, 0, "OfficeCeiling", 2));
@@ -45,12 +45,12 @@ void setup() {
     Device::add(new NCD8Light(ADDRESS, 5, "RearAwning", 2));
 
     // Switches
-//    Device::add(new Switch(A0, "OfficeCeilingSwitch"));
-//    Device::add(new Switch(A1, "LoftSwitch"));
-//    Device::add(new Switch(A2, "RampPorchSwitch"));
-//    Device::add(new Switch(A3, "RampAwningSwitch"));
-//    Device::add(new Switch(A4, "RearPorchSwitch"));
-//    Device::add(new Switch(A5, "RearAwningSwitch"));
+    Device::add(new Switch(A0, "OfficeCeilingSwitch"));
+    Device::add(new Switch(A1, "LoftSwitch"));
+    Device::add(new Switch(A2, "RampPorchSwitch"));
+    Device::add(new Switch(A3, "RampAwningSwitch"));
+    Device::add(new Switch(A4, "RearPorchSwitch"));
+    Device::add(new Switch(A5, "RearAwningSwitch"));
     // More available inputs A6, A7, TX, RX - use for door switch, motion detector, etc.
 
     // Activities/States - define for every other state

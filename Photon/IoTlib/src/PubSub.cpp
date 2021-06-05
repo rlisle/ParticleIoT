@@ -39,7 +39,7 @@ PubSub::PubSub(String controllerName)
 }
 
 void PubSub::publish(String topic, String message) {
-    Particle.publish(topic,message);
+//    Particle.publish(topic,message);
 }
 
 void PubSub::loop()
@@ -51,7 +51,7 @@ void PubSub::sendAlivePeriodically() {
     system_tick_t secondsSinceLastAlive = Time.now() - _lastAliveTime;
     if(secondsSinceLastAlive > ALIVE_MSG_SECONDS) {
         secondsSinceLastAlive = Time.now();
-        publish("patriot/alive", _controllerName);   //TODO: add timestamp, maybe use Log instead
+//        publish("patriot/alive", _controllerName);   //TODO: add timestamp, maybe use Log instead
     }
 }
 
@@ -87,7 +87,7 @@ void PubSub::parseMessage(String topic, String message)
         // MEMORY
         } else if(subtopic == "memory") {
             if(message == _controllerName) {
-                publish( "debug/"+_controllerName, String::format("Free memory = %d", System.freeMemory()));
+                //publish( "debug/"+_controllerName, String::format("Free memory = %d", System.freeMemory()));
             }
             
         // PING
@@ -95,7 +95,7 @@ void PubSub::parseMessage(String topic, String message)
             // Respond if ping is addressed to us
             if(message == _controllerName) {
                 Log.trace("Ping addressed to us");
-                publish(kPublishName + "/pong", _controllerName);
+                //publish(kPublishName + "/pong", _controllerName);
             }
             
         // PONG
@@ -267,7 +267,7 @@ void PubSub::log(const char *category, String message) {
 //    if(!_logging && strcmp(category, "app") == 0) {
     if(!_logging) {
         _logging++;
-        publish("patriot/log/"+_controllerName, time + " " + message);
+        //publish("patriot/log/"+_controllerName, time + " " + message);
         _logging--;
     }
 }
