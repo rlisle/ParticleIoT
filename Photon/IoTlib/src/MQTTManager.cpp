@@ -322,7 +322,7 @@ void MQTTManager::logMessage(const char *msg, LogLevel level, const char *catego
     }
 
     //TODO: If MQTT not connected, write to Serial instead
-//    Serial.println(s);
+    Serial.println(s);
     log(category, s);
 }
 

@@ -24,7 +24,11 @@ Author: Ron Lisle
 // You'll need to create this file and add your credentials
 #include "secrets.h"
 
+SerialLogHandler logHandler;
+
 void setup() {
+    Log.info("RightSlide setup");
+    
     IoT::begin(MQTT_URL,"RightSlide", MQTT_USER, MQTT_PASSWORD);
 
     // Lights
