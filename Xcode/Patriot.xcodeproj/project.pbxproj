@@ -31,7 +31,7 @@
 		2755615325CC1FAA00FEE0FF /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		2755615425CC1FAA00FEE0FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		2755DBE4259DFA3900971ABA /* device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = device.cpp; path = ../Photon/IoTlib/src/device.cpp; sourceTree = "<group>"; };
-		27835F5D266E5A9F00F01DAA /* secrets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = secrets.h; sourceTree = "<group>"; };
+		27835F5D266E5A9F00F01DAA /* secrets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = secrets.h; path = ../Photon/Controllers/secrets.h; sourceTree = "<group>"; };
 		E41085852568627000EFBE84 /* PatriotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PatriotLight.cpp; path = ../Photon/Plugins/Light/src/PatriotLight.cpp; sourceTree = "<group>"; };
 		E41085862568627000EFBE84 /* PatriotLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PatriotLight.h; path = ../Photon/Plugins/Light/src/PatriotLight.h; sourceTree = "<group>"; };
 		E41085872568628F00EFBE84 /* library.properties */ = {isa = PBXFileReference; lastKnownFileType = text; name = library.properties; path = ../Photon/Plugins/Light/library.properties; sourceTree = "<group>"; };
