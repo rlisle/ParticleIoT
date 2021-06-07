@@ -19,11 +19,12 @@ Author: Ron Lisle
 #include <PatriotCurtain.h>
 #include <PatriotNCD4Switch.h>
 
+#define MQTT_URL "d38d0f2286474fb4927481d11e25f389.s1.eu.hivemq.cloud"
 #define ADDRESS 1      // PWM board address A0 jumper set
 #define I2CR4IO4 0x20  // 4xRelay+4GPIO address
 
 void setup() {
-    IoT::begin("192.168.10.184", "RearPanel");
+    IoT::begin(MQTT_URL, "RearPanel");
 
     // PartOfDay
     Device::add(new PartOfDay());

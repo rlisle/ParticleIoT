@@ -19,10 +19,12 @@ All text above must be included in any redistribution.
 #define MQTT_TIMEOUT_SECONDS 60*5
 #define MQTT_ALIVE_SECONDS 60
 
-MQTTManager::MQTTManager(String brokerIP, String connectID, String controllerName)
+MQTTManager::MQTTManager(String brokerIP, String connectID, String controllerName, String user, String password)
 {
     _controllerName = controllerName.toLowerCase();
     _logging = 0;
+    _user = user;
+    _password = password;
 
     // We'll want to start with ALL whenever modifying code.
     // Use MQTT to switch to error when done testing or vs. a vs.
@@ -34,13 +36,15 @@ MQTTManager::MQTTManager(String brokerIP, String connectID, String controllerNam
     //const LogCategoryFilters &filters) : LogHandler(level, filters)
 
     _mqtt =  new MQTT((char *)brokerIP.c_str(), 1883, IoT::mqttHandler);
-    connect(connectID);
+    connect(connectID, user, password);
 }
 
 //TODO: If MQTT doesn't connect, then start 
-void MQTTManager::connect(String connectID) {
+void MQTTManager::connect(String connectID, String user, String password) {
 
     _connectID = connectID;
+    _user = user;
+    _password = password;
     _lastMQTTtime = Time.now();
     _lastAliveTime = _lastMQTTtime;
 
@@ -54,7 +58,7 @@ void MQTTManager::connect(String connectID) {
         _mqtt->disconnect();
     }
 
-    _mqtt->connect(connectID);
+    _mqtt->connect(connectID, user, password);
     if (_mqtt->isConnected()) {
         if(_mqtt->subscribe(kPublishName+"/#") == false) {
             Log.error("Unable to subscribe to MQTT " + kPublishName + "/#");
@@ -82,7 +86,7 @@ void MQTTManager::loop()
 {
     if(_mqtt != NULL && _mqtt->isConnected()) {
         _mqtt->loop();
-        sendAlivePeriodically()
+        sendAlivePeriodically();
     }
 
     reconnectCheck();
@@ -91,8 +95,8 @@ void MQTTManager::loop()
 void MQTTManager::sendAlivePeriodically() {
     system_tick_t secondsSinceLastAlive = Time.now() - _lastAliveTime;
     if(secondsSinceLastAlive > MQTT_ALIVE_SECONDS) {
-        secondsSinceLastAlive = Time.now()
-        publish("patriot/alive", _controllerName)
+        _lastAliveTime = Time.now();
+        publish("patriot/alive", _controllerName);  // TODO: Add a timestamp
     }
 }
 
@@ -100,7 +104,7 @@ void MQTTManager::reconnectCheck() {
     system_tick_t secondsSinceLastMessage = Time.now() - _lastMQTTtime;
     if(secondsSinceLastMessage > MQTT_TIMEOUT_SECONDS) {
         Log.warn("Connection lost, reconnecting. _lastMQTTtime = " + String(_lastMQTTtime) + ", Time.now() = " + String(Time.now()));
-        connect(_connectID);
+        connect(_connectID, _user, _password);
     }
 }
 

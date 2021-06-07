@@ -26,10 +26,10 @@ MQTTManager* IoT::_mqttManager = NULL;
  * Begin gets everything going.
  * It must be called exactly once by the sketch
  */
-void IoT::begin(String brokerIP, String controllerName)
+void IoT::begin(String brokerIP, String controllerName, String user, String password)
 {
     String connectID = controllerName + "Id";
-    _mqttManager = new MQTTManager(brokerIP, connectID, controllerName);
+    _mqttManager = new MQTTManager(brokerIP, connectID, controllerName, user, password);
     
     // Subscribe to events. There is a 1/second limit for events.
     Particle.subscribe(kPublishName, IoT::subscribeHandler, MY_DEVICES);

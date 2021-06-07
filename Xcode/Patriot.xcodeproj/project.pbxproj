@@ -31,6 +31,7 @@
 		2755615325CC1FAA00FEE0FF /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		2755615425CC1FAA00FEE0FF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		2755DBE4259DFA3900971ABA /* device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = device.cpp; path = ../Photon/IoTlib/src/device.cpp; sourceTree = "<group>"; };
+		27835F5D266E5A9F00F01DAA /* secrets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = secrets.h; sourceTree = "<group>"; };
 		E41085852568627000EFBE84 /* PatriotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PatriotLight.cpp; path = ../Photon/Plugins/Light/src/PatriotLight.cpp; sourceTree = "<group>"; };
 		E41085862568627000EFBE84 /* PatriotLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PatriotLight.h; path = ../Photon/Plugins/Light/src/PatriotLight.h; sourceTree = "<group>"; };
 		E41085872568628F00EFBE84 /* library.properties */ = {isa = PBXFileReference; lastKnownFileType = text; name = library.properties; path = ../Photon/Plugins/Light/library.properties; sourceTree = "<group>"; };
@@ -91,6 +92,7 @@
 				2733856025AF25A50032BB1F /* RightSlide.ino */,
 				2733855F25AF25930032BB1F /* project.properties */,
 				2733855E25AF25930032BB1F /* README.md */,
+				27835F5D266E5A9F00F01DAA /* secrets.h */,
 			);
 			name = RightSlide;
 			sourceTree = "<group>";
@@ -335,7 +337,7 @@
 			attributes = {
 				LastUpgradeCheck = 1220;
 			};
-			buildConfigurationList = E4849C4D2566A90700A39734 /* Build configuration list for PBXProject "Xcode" */;
+			buildConfigurationList = E4849C4D2566A90700A39734 /* Build configuration list for PBXProject "Patriot" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -367,7 +369,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4849C4D2566A90700A39734 /* Build configuration list for PBXProject "Xcode" */ = {
+		E4849C4D2566A90700A39734 /* Build configuration list for PBXProject "Patriot" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4849C4E2566A90700A39734 /* Debug */,

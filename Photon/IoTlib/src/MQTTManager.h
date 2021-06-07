@@ -23,8 +23,8 @@ class MQTTManager : public LogHandler
 public:
     LogLevel    _logLevel;
 
-    MQTTManager(String brokerIP, String connectID, String controllerName);
-    
+    MQTTManager(String brokerIP, String connectID, String controllerName, String user, String password);
+
     bool        publish(String topic, String message);
     void        parseMessage(String topic, String message);
     void        loop();
@@ -36,14 +36,17 @@ private:
     system_tick_t _lastMQTTtime;
     system_tick_t _lastAliveTime;   // Send out alive messages periodically
     String        _connectID;       // Used when reconnecting
+    String      _user;
+    String      _password;
     
     int       _logging; // a counting semaphore to prevent recursion
 
     void      (*_callback)(char*,uint8_t*,unsigned int);
-    void      connect(String connectID);
+    void      connect(String connectID, String user, String password);
     void      reconnectCheck();
     int       parseValue(String message);
     void      parseLogLevel(String message);
+    void      sendAlivePeriodically();
     
     // LogHandler methods
     const char* extractFileName(const char *s);

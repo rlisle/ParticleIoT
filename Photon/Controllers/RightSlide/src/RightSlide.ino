@@ -20,8 +20,12 @@ Author: Ron Lisle
 #include <PatriotLight.h>
 #include <PatriotSwitch.h>
 
+// secrets.h defines MQTT_URL, MQTT_USER, and MQTT_PASSWORD
+// You'll need to create this file and add your credentials
+#include "secrets.h"
+
 void setup() {
-    IoT::begin("192.168.10.184","RightSlide");
+    IoT::begin(MQTT_URL,"RightSlide", MQTT_USER, MQTT_PASSWORD);
 
     // Lights
     Device::add(new Light(TX, "Loveseat"));
