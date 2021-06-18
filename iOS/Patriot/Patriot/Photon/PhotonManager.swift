@@ -38,8 +38,9 @@ class PhotonManager: NSObject
 
     var isLoggedIn = false
     
-    var photons: [String: Photon] = [: ]   // All the particle devices attached to logged-in user's account
     let eventName          = "patriot"
+    
+    var photons: [Photon] = [ ]   // All the particle devices attached to logged-in user's account
     
     //TODO: make these calculated properties using aggregation of photons collection
     var devices: [DeviceInfo] = []
@@ -104,16 +105,15 @@ extension PhotonManager: HwManager
 
     func addAllPhotonsToCollection(photonDevices: [ParticleDevice])
     {
-        self.photons = [: ]
+        self.photons = []
         for photonDevice in photonDevices
         {
             if isValidPhoton(photonDevice)
             {
-                if let name = photonDevice.name?.lowercased()
-                {
+                if photonDevice.name != nil {
                     let photon = Photon(device: photonDevice)
                     photon.delegate = self
-                    self.photons[name] = photon
+                    self.photons.append(photon)
                     photon.refresh()
                 }
             }
@@ -129,10 +129,7 @@ extension PhotonManager: HwManager
     
     func getPhoton(named: String) -> Photon?
     {
-        let lowerCaseName = named.lowercased()
-        let photon = photons[lowerCaseName]
-        
-        return photon
+        return photons.filter { $0.name == named.lowercased() }.first
     }
 
     func sendCommand(activity: String, isActive: Bool, completion: @escaping (Error?) -> Void)
@@ -162,29 +159,39 @@ extension PhotonManager: HwManager
     func subscribeToEvents()
     {
         subscribeHandler = ParticleCloud.sharedInstance().subscribeToMyDevicesEvents(withPrefix: eventName, handler: { (event: ParticleEvent?, error: Error?) in
-            if let error = error {
-                print("Error subscribing to events: \(error)")
+            
+            guard error == nil else {
+                print("Error subscribing to events: \(error!)")
+                return
             }
-            else
-            {
-                DispatchQueue.main.async(execute: {
-                    if let eventData = event?.data {
-                        let splitArray = eventData.components(separatedBy: ":")
-                        let name = splitArray[0].lowercased()
-                        if let percent: Int = Int(splitArray[1]), percent >= 0, percent <= 100
-                        {
-                            //TODO: Currently can't tell if this is an activity or device
-                            self.activityDelegate?.activityChanged(name: name, isActive: percent != 0)
-                            self.deviceDelegate?.deviceChanged(name: name, percent: percent)
-                        }
-                        else
-                        {
-                            print("Event data is not a valid number")
-                        }
-                    }
-                    
-                })
-            }
+            
+            DispatchQueue.main.async(execute: {
+                guard let event = event else {
+                    print("Event empty")
+                    return
+                }
+                
+                let topic = event.event
+                let message = event.data
+                // Strip off 'patriot/'
+                let command = String(topic.dropFirst("patriot/".count).lowercased())
+                
+                if let message = message,
+                    let percent: Int = Int(message),
+                    percent >= 0,
+                    percent <= 100
+                {
+                    //TODO: Currently can't tell if this is an activity or device
+                    self.activityDelegate?.activityChanged(name: command, isActive: percent != 0)
+                    self.deviceDelegate?.deviceChanged(name: command, percent: percent)
+                }
+                else
+                {
+                    print("Event data is not a valid number")
+                }
+                
+
+            })
         })
     }
 }

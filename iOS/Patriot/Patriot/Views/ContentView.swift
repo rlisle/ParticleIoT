@@ -13,25 +13,23 @@ struct ContentView: View {
     
     var body: some View {
 
-        VStack {
+        NavigationView {
 //            Menu("Activities") {
-//                List(PhotonManager.shared.activities) {
+//                List(PhotonManager.shared.activities, id: \.name) {
 //                    Text($0.name)
 //                }
 //            }
             
 //            Menu("Devices") {
-//                List(PhotonManager.shared.devices) {
+//                List(PhotonManager.shared.devices, id: \.name) {
 //                    Text($0.name)
 //                }
 //            }
-//
+
 //            Menu("Photons") {
-//                //TODO: use enumeration instead of hardcoding
-//                List {
-//                    Text(PhotonManager.shared.photons["FrontPanel"].name)
-//                    Text(PhotonManager.shared.photons["RearPanel"].name)
-//                }
+                List(PhotonManager.shared.photons) {
+                    Text($0.name)
+                }
 //            }
             
             Menu("Settings") {

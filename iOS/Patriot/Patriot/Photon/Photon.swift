@@ -26,10 +26,10 @@
 import Foundation
 import Particle_SDK
 
-
-class Photon: HwController
+class Photon: HwController, Identifiable
 {
     let uninitializedString = "uninitialized"
+    let id = UUID()
     
     var devices: [DeviceInfo] = []      // Cached list of device names exposed by Photon
     var activities: [ActivityInfo] = [] // Optional list of current activities and state
@@ -37,17 +37,14 @@ class Photon: HwController
     
     var delegate: PhotonNotifying?      // Notifies manager when status changes
     
-
     internal let particleDevice: ParticleDevice! // Reference to Particle-SDK device object
-    
     
     var name: String
     {
         get {
-            return particleDevice.name ?? "unknown"
+            return particleDevice.name?.lowercased() ?? "unknown"
         }
     }
-    
     
     required init(device: ParticleDevice)
     {
@@ -60,7 +57,7 @@ class Photon: HwController
      */
     func refresh()
     {
-        readPublishName()
+        //readPublishName()
         refreshDevices()
         refreshSupported()
     }
@@ -157,12 +154,12 @@ extension Photon    // Activities
 
 extension Photon        // Read variables
 {
-    func readPublishName()
-    {
-        readVariable("PublishName") { (result) in
-            self.publish = result ?? self.uninitializedString
-        }
-    }
+//    func readPublishName()
+//    {
+//        readVariable("PublishName") { (result) in
+//            self.publish = result ?? self.uninitializedString
+//        }
+//    }
 
     func readVariable(_ name: String, completion: @escaping (String?) -> Void)
     {
