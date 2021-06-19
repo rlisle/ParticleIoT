@@ -15,11 +15,8 @@ import Foundation
 protocol HwManager: AnyObject
 {
     var deviceDelegate:         DeviceNotifying?    { get set }
-    var activityDelegate:       ActivityNotifying?  { get set }
     var eventName:              String              { get }
     var devices:                [DeviceInfo]        { get }
-    var activities:             [ActivityInfo]      { get }
     
-    func sendCommand(activity: String, isActive: Bool, completion: @escaping (Error?) -> Void)
     func sendCommand(device: String, percent: Int, completion: @escaping (Error?) -> Void)
 }

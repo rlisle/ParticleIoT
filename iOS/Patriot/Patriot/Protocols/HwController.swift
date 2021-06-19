@@ -17,8 +17,6 @@ import Particle_SDK
 protocol HwController
 {
     var devices: [DeviceInfo]           { get }
-    var activities: [ActivityInfo]      { get }
-    var publish: String                 { get }
     var name: String                    { get }
     init(device: ParticleDevice)
     func refresh()

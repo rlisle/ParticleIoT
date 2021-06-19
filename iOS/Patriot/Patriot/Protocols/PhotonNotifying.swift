@@ -11,5 +11,4 @@ import Foundation
 protocol PhotonNotifying
 {
     func device(named: String, hasDevices: [DeviceInfo])
-    func device(named: String, hasActivities: [ActivityInfo])
 }
